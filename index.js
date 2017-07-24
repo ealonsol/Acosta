@@ -3,9 +3,6 @@ const app = express();
 const mongoose= require('mongoose');
 const config = require('./config/database');
 
-
-console.log('la base de datos es : ' + config.db);
-console.log('la ruta es : '+ config.uri);
 mongoose.Promise = global.Promise;
 
 mongoose.connect(config.uri, (err)=>{
