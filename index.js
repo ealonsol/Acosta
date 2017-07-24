@@ -6,7 +6,6 @@ const config = require('./config/database');
 mongoose.Promise = global.Promise;
 
 mongoose.connect(config.uri, (err)=>{
-//mongoose.connect('mongodb://localhost:27017/test', (err)=>{
   if(err){
     console.log('No conectado a la base de datos ' + config.db, err);
   }
