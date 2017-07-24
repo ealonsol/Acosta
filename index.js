@@ -4,12 +4,12 @@ const mongoose= require('mongoose');
 const config = require('./config/database');
 
 
-console.log('la base de datos es : '+config.db);
-console.log('la ruta es : '+config.uri);
+console.log('la base de datos es : ' + config.db);
+console.log('la ruta es : '+ config.uri);
 mongoose.Promise = global.Promise;
 
-
 mongoose.connect(config.uri, (err)=>{
+//mongoose.connect('mongodb://localhost:27017/test', (err)=>{
   if(err){
     console.log('No conectado a la base de datos ' + config.db, err);
   }
