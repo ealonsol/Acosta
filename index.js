@@ -1,7 +1,10 @@
 const express = require('express');
 const app = express();
+const router = express.Router();
 const mongoose= require('mongoose');
 const config = require('./config/database');
+const authentication = require('./routes/authentication')(router);
+const bodyParser = require('body-parser');
 
 const path = require('path');
 
@@ -16,7 +19,12 @@ mongoose.connect(config.uri, (err)=>{
   }
 });
 
+app.use(bodyParser.urlencoded({extended:false}));
+
+app.use(bodyParser.json());
+
 app.use(express.static(__dirname+'/client/dist'));
+app.use('/authentication', authentication);
 
 app.get('*', (req, res)=>{
   //res.send('<h1>hello world</h1>');
