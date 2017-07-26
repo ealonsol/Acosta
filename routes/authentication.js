@@ -2,36 +2,19 @@ module.exports = (router) => {
 
     const User = require('../models/user');
 
-    router.use(function(req, res, next) {
-        // do logging
-        console.log('something is happening.');
-        next(); // make sure we go to our next route and don't stop here
-    });
-
-    router.get('/', function(req, res) {
-        res.json({ message: 'hooray! welcome to our api!' });   
-    });
-
     router.post('/register', (req,res) => {
-        /*req.body.email;
-        req.body.username;
-        req.body.password;*/
         if(!req.body.email){
-            res.json({success:false, message:'No proveyo un email'})
+            res.json({success:false, message:'No ingresó un email'})
         }
         else{
             if(!req.body.username){
-                res.json({success:false, message:'No proveyo un username'})
+                res.json({success:false, message:'No ingresó un username'})
             }
             else{
                 if(!req.body.password){
-                    res.json({success:false, message:'No proveyo un password'})
+                    res.json({success:false, message:'No ingresó un password'})
                 }
                 else{
-                    res.send('Bienvenido ' +req.body.username);
-                    console.log(req.body.username);
-                    console.log(req.body.password);
-                    console.log(req.body.email);
                     let user = new User({
                         username: req.body.username.toLowerCase(),
                         password:req.body.password.toLowerCase(),
@@ -39,19 +22,26 @@ module.exports = (router) => {
                     });
                     user.save((err)=>{
                         if(err){
-                            res.json({sucess:false, message:'No se grabó el usuario. Error: ', err});
-                            res.send();
+                            if(err.code === 11000){
+                                res.json({sucess:false, message:'Usuario o email existe'});    
+                            }else{
+                                if(err.errors){
+                                    if(err.errors.email){
+                                        res.json({sucess:false, message:err.errors.email.message});    
+                                    }
+                                }
+                                else{
+                                    res.json({sucess:false, message:'No se grabó el usuario. Error: ', err});
+                                }
+                            }
                         }
                         else{
                             res.json({sucess:true, message:'Se grabó el usuario '});
-                            res.send();
                         }
                     });
-                    
                 }
             }
         }
-        
     });
     return router;
 }
